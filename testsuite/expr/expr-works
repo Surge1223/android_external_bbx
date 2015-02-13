@@ -1,0 +1,58 @@
+# bbx expr
+bbx expr 1 \| 1
+bbx expr 1 \| 0
+bbx expr 0 \| 1
+bbx expr 1 \& 1
+bbx expr 0 \< 1
+bbx expr 1 \> 0
+bbx expr 0 \<= 1
+bbx expr 1 \<= 1
+bbx expr 1 \>= 0
+bbx expr 1 \>= 1
+bbx expr 1 + 2
+bbx expr 2 - 1
+bbx expr 2 \* 3
+bbx expr 12 / 2
+bbx expr 12 % 5
+
+
+set +e
+bbx expr 0 \| 0
+if [ $? != 1 ] ; then
+	exit 1;
+fi;
+
+bbx expr 1 \& 0
+if [ $? != 1 ] ; then
+	exit 1;
+fi;
+
+bbx expr 0 \& 1
+if [ $? != 1 ] ; then
+	exit 1;
+fi;
+
+bbx expr 0 \& 0
+if [ $? != 1 ] ; then
+	exit 1;
+fi;
+
+bbx expr 1 \< 0
+if [ $? != 1 ] ; then
+	exit 1;
+fi;
+
+bbx expr 0 \> 1
+if [ $? != 1 ] ; then
+	exit 1;
+fi;
+
+bbx expr 1 \<= 0
+if [ $? != 1 ] ; then
+	exit 1;
+fi;
+
+bbx expr 0 \>= 1
+if [ $? != 1 ] ; then
+	exit 1;
+fi;

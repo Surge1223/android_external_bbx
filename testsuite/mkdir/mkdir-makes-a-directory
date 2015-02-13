@@ -1,0 +1,2 @@
+bbx mkdir foo
+test -d foo

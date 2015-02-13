@@ -1,0 +1,2 @@
+bbx cp /dev/null foo
+test -f foo

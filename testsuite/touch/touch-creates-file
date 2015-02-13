@@ -1,0 +1,2 @@
+bbx touch foo
+test -f foo

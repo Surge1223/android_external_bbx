@@ -1,0 +1,11 @@
+#!/bin/sh
+
+bbx=../bbx
+
+$bbx sleep 10 &
+pid=$!
+sleep 1
+
+echo "Memory map of '$bbx sleep 10':"
+size $bbx
+pmap $pid | env - grep "^[0-9a-f][0-9a-f]* " | sort -r -t " " -k2,999

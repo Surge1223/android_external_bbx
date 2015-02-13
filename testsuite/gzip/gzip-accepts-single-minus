@@ -1,0 +1,1 @@
+echo foo | bbx gzip - >/dev/null

@@ -1,0 +1,3 @@
+f=$(bbx hostname -f).
+d=$(bbx hostname -d)
+test x"${f#*.}" = x"$d${d:+.}"

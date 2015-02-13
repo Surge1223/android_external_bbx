@@ -1,0 +1,52 @@
+rm -f foo bar
+echo "       y" | unexpand ../../bbx > foo
+echo "       y" | bbx unexpand ../../bbx > bar
+set +e
+test ! -f foo -a -f bar
+if [ $? = 0 ] ; then
+	set -e
+	diff -q foo bar
+fi
+rm -f foo bar
+echo "        y" | unexpand ../../bbx > foo
+echo "        y" | bbx unexpand ../../bbx > bar
+set +e
+test ! -f foo -a -f bar
+if [ $? = 0 ] ; then
+	set -e
+	diff -q foo bar
+fi
+echo "       y       y" | unexpand ../../bbx > foo
+echo "       y       y" | bbx unexpand ../../bbx > bar
+set +e
+test ! -f foo -a -f bar
+if [ $? = 0 ] ; then
+	set -e
+	diff -q foo bar
+fi
+rm -f foo bar
+echo "        y        y" | unexpand ../../bbx > foo
+echo "        y        y" | bbx unexpand ../../bbx > bar
+set +e
+test ! -f foo -a -f bar
+if [ $? = 0 ] ; then
+	set -e
+	diff -q foo bar
+fi
+echo "       y       y" | unexpand -a ../../bbx > foo
+echo "       y       y" | bbx unexpand -a ../../bbx > bar
+set +e
+test ! -f foo -a -f bar
+if [ $? = 0 ] ; then
+	set -e
+	diff -q foo bar
+fi
+rm -f foo bar
+echo "        y        y" | unexpand -a ../../bbx > foo
+echo "        y        y" | bbx unexpand -a ../../bbx > bar
+set +e
+test ! -f foo -a -f bar
+if [ $? = 0 ] ; then
+	set -e
+	diff -q foo bar
+fi

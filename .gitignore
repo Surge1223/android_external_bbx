@@ -1,0 +1,39 @@
+#
+# Kbuild ignores
+#
+.*
+*.o
+*.o.*
+*.a
+*.s
+Kbuild
+Config.in
+
+#
+# Never ignore these
+#
+!.gitignore
+!.config*
+
+#
+# Normal output
+#
+/bbx
+/bbx_old
+/bbx_unstripped*
+
+#
+# Backups / patches
+#
+*~
+*.orig
+*.rej
+/*.patch
+/.config.old
+
+#
+# debugging stuff
+#
+core
+.gdb_history
+.gdbinit

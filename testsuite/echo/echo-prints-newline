@@ -1,0 +1,1 @@
+test `bbx echo word | wc -c` -eq 5

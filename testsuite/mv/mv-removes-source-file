@@ -1,0 +1,4 @@
+touch foo
+bbx mv foo bar
+test ! -e foo
+test -f bar

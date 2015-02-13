@@ -1,0 +1,16 @@
+#!/bin/sh
+
+bbx=../bbx
+
+i=4000
+echo "Before we started $i copies of '$bbx sleep 10':"
+$bbx nmeter '%t %[pn] %m' | head -3
+
+while test $i != 0; do
+    $bbx sleep 10 &
+    i=$((i-1))
+done
+sleep 1
+
+echo "After:"
+$bbx nmeter '%t %[pn] %m' | head -3

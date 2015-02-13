@@ -1,0 +1,1 @@
+test x$(dirname $(pwd)) = x$(bbx dirname $(pwd))

@@ -1,0 +1,9 @@
+rm -f foo bar
+strings -af ../../bbx > foo
+bbx strings -af ../../bbx > bar
+set +e
+test ! -f foo -a -f bar
+if [ $? = 0 ] ; then
+	set -e
+	diff -q foo bar
+fi

@@ -1,0 +1,3 @@
+echo I WANT > foo
+bbx cp foo bar
+cmp foo bar

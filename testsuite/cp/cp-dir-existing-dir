@@ -1,0 +1,5 @@
+mkdir bar
+touch bar/baz
+mkdir foo
+bbx cp -R bar foo
+test -f foo/bar/baz
