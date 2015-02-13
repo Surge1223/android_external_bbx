@@ -255,6 +255,20 @@ config DEVMEM
 	  devmem is a small program that reads and writes from physical
 	  memory using /dev/mem.
 
+config DEVMEM2
+	bool "devmem2"
+	default y
+	help
+	  devmem is a small program that reads and writes from physical
+	  memory using /dev/mem.
+
+config VIEWMEM
+	bool "viewmem"
+	default y
+	help
+	  viewmem is a small program that prints a specified physical
+	  memory range from /dev/mem.
+	  
 config EJECT
 	bool "eject"
 	default y
