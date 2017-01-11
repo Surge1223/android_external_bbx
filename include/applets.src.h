@@ -1,9 +1,9 @@
 /* vi: set sw=4 ts=4: */
 /*
- * applets.h - a listing of all busybox applets.
+ * applets.h - a listing of all bbx applets.
  *
  * If you write a new applet, you need to add an entry to this list to make
- * busybox aware of it.
+ * bbx aware of it.
  */
 
 /*
@@ -12,7 +12,7 @@ name2 - applet name, converted to C (ether-wake: name2 = ether_wake)
 main  - corresponding <applet>_main to call (bzcat: main = bunzip2)
 l     - location to install link to: [/usr]/[s]bin
 s     - suid type:
-        BB_SUID_REQUIRE: will complain if busybox isn't suid
+        BB_SUID_REQUIRE: will complain if bbx isn't suid
         and is run by non-root (applet_main() will not be called at all)
         BB_SUID_DROP: will drop suid prior to applet_main()
         BB_SUID_MAYBE: neither of the above

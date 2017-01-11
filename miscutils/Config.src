@@ -20,7 +20,7 @@ config BBCONFIG
 	default n
 	help
 	  The bbconfig applet will print the config file with which
-	  busybox was built.
+	  bbx was built.
 
 config FEATURE_COMPRESS_BBCONFIG
 	bool "Compress bbconfig data"
@@ -30,7 +30,7 @@ config FEATURE_COMPRESS_BBCONFIG
 	  Store bbconfig data in compressed form, uncompress them on-the-fly
 	  before output.
 
-	  If you have a really tiny busybox with few applets enabled (and
+	  If you have a really tiny bbx with few applets enabled (and
 	  bunzip2 isn't one of them), the overhead of the decompressor might
 	  be noticeable. Also, if you run executables directly from ROM
 	  and have very little memory, this might not be a win. Otherwise,
@@ -216,7 +216,7 @@ config DEVFSD_MODLOAD
 	default y
 	depends on DEVFSD
 	help
-	  This actually doesn't work with busybox modutils but needs
+	  This actually doesn't work with bbx modutils but needs
 	  the external modutils.
 
 config DEVFSD_FG_NP
@@ -244,7 +244,7 @@ config FEATURE_DEVFS
 	  Use linux >= 2.6 (optionally with hotplug) and mdev instead!
 
 	  For legacy systems -- if there is no way around devfsd -- this
-	  tells busybox to look for names like /dev/loop/0 instead of
+	  tells bbx to look for names like /dev/loop/0 instead of
 	  /dev/loop0. If your /dev directory has normal names instead of
 	  devfs names, you don't want this.
 
@@ -443,7 +443,7 @@ config MAKEDEVS
 	  There are two choices for command line behaviour, the interface
 	  as used by LEAF/Linux Router Project, or a device table file.
 
-	  'leaf' is traditionally what busybox follows, it allows multiple
+	  'leaf' is traditionally what bbx follows, it allows multiple
 	  devices of a particluar type to be created per command.
 	  e.g. /dev/hda[0-9]
 	  Device properties are passed as command line arguments.
@@ -524,7 +524,7 @@ config RUNLEVEL
 	help
 	  find the current and previous system runlevel.
 
-	  This applet uses utmp but does not rely on busybox supporing
+	  This applet uses utmp but does not rely on bbx supporing
 	  utmp on purpose. It is used by e.g. emdebian via /etc/init.d/rc.
 
 config RX

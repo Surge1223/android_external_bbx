@@ -7,7 +7,7 @@ NAME = bionic
 # prevent local tree builds in bionic,
 # but allow initial version check (SUBMAKE)
 ifeq (,$(filter s, $(MAKEFLAGS)))
-    KBUILD_OUTPUT ?= $(OUT)/obj/busybox
+    KBUILD_OUTPUT ?= $(OUT)/obj/bbx
 endif
 
 # *DOCUMENTATION*
@@ -26,7 +26,7 @@ MAKEFLAGS += --no-print-directory
 # their own directory. If in some directory we have a dependency on
 # a file in another dir (which doesn't happen often, but it's often
 # unavoidable when linking the built-in.o targets which finally
-# turn into busybox), we will call a sub make in that other dir, and
+# turn into bbx), we will call a sub make in that other dir, and
 # after that we are sure that everything which is in that other dir
 # is now up to date.
 #
@@ -324,8 +324,8 @@ AFLAGS_KERNEL	=
 # Use LINUXINCLUDE when you must reference the include/ directory.
 # Needed to be compatible with the O= option
 CFLAGS		:= $(CFLAGS)
-# Added only to final link stage of busybox binary
-CFLAGS_busybox	:= $(CFLAGS_busybox)
+# Added only to final link stage of bbx binary
+CFLAGS_bbx	:= $(CFLAGS_bbx)
 CPPFLAGS	:= $(CPPFLAGS)
 AFLAGS		:= $(AFLAGS)
 LDFLAGS		:= $(LDFLAGS)
@@ -453,7 +453,7 @@ config: scripts_basic outputmakefile gen_build_files FORCE
 
 else
 # ===========================================================================
-# Build targets only - this includes busybox, arch specific targets, clean
+# Build targets only - this includes bbx, arch specific targets, clean
 # targets and others. In general all targets except *config targets.
 
 ifeq ($(KBUILD_EXTMOD),)
@@ -466,7 +466,7 @@ scripts: gen_build_files scripts_basic include/config/MARKER
 
 scripts_basic: include/autoconf.h
 
-# Objects we will link into busybox / subdirs we need to visit
+# Objects we will link into bbx / subdirs we need to visit
 core-y		:= \
 		applets/ \
 
@@ -483,6 +483,7 @@ libs-y		:= \
 		init/ \
 		libbb/ \
 		libpwdgrp/ \
+		libres/ \
 		loginutils/ \
 		mailutils/ \
 		miscutils/ \
@@ -535,8 +536,8 @@ endif
 # The all: target is the default when no target is given on the
 # command line.
 # This allow a user to issue only 'make' to build a kernel including modules
-# Defaults busybox but it is usually overridden in the arch makefile
-all: busybox doc
+# Defaults bbx but it is usually overridden in the arch makefile
+all: bbx doc
 
 -include $(srctree)/arch/$(ARCH)/Makefile
 
@@ -549,7 +550,7 @@ CHECKFLAGS += $(NOSTDINC_FLAGS)
 # set in the environment
 # Also any assignments in arch/$(ARCH)/Makefile take precedence over
 # this default value
-export KBUILD_IMAGE ?= busybox
+export KBUILD_IMAGE ?= bbx
 
 #
 # INSTALL_PATH specifies where to place the updated kernel and system map
@@ -567,9 +568,9 @@ export MODLIB
 
 
 ifeq ($(KBUILD_EXTMOD),)
-busybox-dirs	:= $(patsubst %/,%,$(filter %/, $(core-y) $(core-m) $(libs-y) $(libs-m)))
+bbx-dirs	:= $(patsubst %/,%,$(filter %/, $(core-y) $(core-m) $(libs-y) $(libs-m)))
 
-busybox-alldirs	:= $(sort $(busybox-dirs) $(patsubst %/,%,$(filter %/, \
+bbx-alldirs	:= $(sort $(bbx-dirs) $(patsubst %/,%,$(filter %/, \
 		     $(core-n) $(core-) $(libs-n) $(libs-) \
 		)))
 
@@ -578,42 +579,42 @@ libs-y1		:= $(patsubst %/, %/lib.a, $(libs-y))
 libs-y2		:= $(patsubst %/, %/built-in.o, $(libs-y))
 libs-y		:= $(libs-y1) $(libs-y2)
 
-# Build busybox
+# Build bbx
 # ---------------------------------------------------------------------------
-# busybox is build from the objects selected by $(busybox-init) and
-# $(busybox-main). Most are built-in.o files from top-level directories
+# bbx is build from the objects selected by $(bbx-init) and
+# $(bbx-main). Most are built-in.o files from top-level directories
 # in the kernel tree, others are specified in arch/$(ARCH)Makefile.
-# Ordering when linking is important, and $(busybox-init) must be first.
+# Ordering when linking is important, and $(bbx-init) must be first.
 #
-# busybox
+# bbx
 #   ^
 #   |
-#   +-< $(busybox-init)
+#   +-< $(bbx-init)
 #   |   +--< init/version.o + more
 #   |
-#   +--< $(busybox-main)
+#   +--< $(bbx-main)
 #   |    +--< driver/built-in.o mm/built-in.o + more
 #   |
 #   +-< kallsyms.o (see description in CONFIG_KALLSYMS section)
 #
-# busybox version (uname -v) cannot be updated during normal
+# bbx version (uname -v) cannot be updated during normal
 # descending-into-subdirs phase since we do not yet know if we need to
-# update busybox.
-# Therefore this step is delayed until just before final link of busybox -
+# update bbx.
+# Therefore this step is delayed until just before final link of bbx -
 # except in the kallsyms case where it is done just before adding the
 # symbols to the kernel.
 #
 # System.map is generated to document addresses of all kernel symbols
 
-busybox-all  := $(core-y) $(libs-y)
+bbx-all  := $(core-y) $(libs-y)
 
-# Rule to link busybox - also used during CONFIG_KALLSYMS
+# Rule to link bbx - also used during CONFIG_KALLSYMS
 # May be overridden by arch/$(ARCH)/Makefile
-quiet_cmd_busybox__ ?= LINK    $@
-      cmd_busybox__ ?= $(srctree)/scripts/trylink \
+quiet_cmd_bbx__ ?= LINK    $@
+      cmd_bbx__ ?= $(srctree)/scripts/trylink \
       "$@" \
       "$(CC)" \
-      "$(CFLAGS) $(CFLAGS_busybox)" \
+      "$(CFLAGS) $(CFLAGS_bbx)" \
       "$(LDFLAGS) $(EXTRA_LDFLAGS)" \
       "$(core-y)" \
       "$(libs-y)" \
@@ -623,33 +624,33 @@ quiet_cmd_busybox__ ?= LINK    $@
 quiet_cmd_sysmap = SYSMAP
       cmd_sysmap = $(CONFIG_SHELL) $(srctree)/scripts/mksysmap
 
-# Link of busybox
+# Link of bbx
 # If CONFIG_KALLSYMS is set .version is already updated
 # Generate System.map and verify that the content is consistent
-# Use + in front of the busybox_version rule to silent warning with make -j2
+# Use + in front of the bbx_version rule to silent warning with make -j2
 # First command is ':' to allow us to use + in front of the rule
-define rule_busybox__
+define rule_bbx__
 	:
-	$(call cmd,busybox__)
-	$(Q)echo 'cmd_$@ := $(cmd_busybox__)' > $(@D)/.$(@F).cmd
+	$(call cmd,bbx__)
+	$(Q)echo 'cmd_$@ := $(cmd_bbx__)' > $(@D)/.$(@F).cmd
 endef
 
 
 ifdef CONFIG_KALLSYMS
-# Generate section listing all symbols and add it into busybox $(kallsyms.o)
+# Generate section listing all symbols and add it into bbx $(kallsyms.o)
 # It's a three stage process:
-# o .tmp_busybox1 has all symbols and sections, but __kallsyms is
+# o .tmp_bbx1 has all symbols and sections, but __kallsyms is
 #   empty
 #   Running kallsyms on that gives us .tmp_kallsyms1.o with
-#   the right size - busybox version (uname -v) is updated during this step
-# o .tmp_busybox2 now has a __kallsyms section of the right size,
+#   the right size - bbx version (uname -v) is updated during this step
+# o .tmp_bbx2 now has a __kallsyms section of the right size,
 #   but due to the added section, some addresses have shifted.
 #   From here, we generate a correct .tmp_kallsyms2.o
-# o The correct .tmp_kallsyms2.o is linked into the final busybox.
-# o Verify that the System.map from busybox matches the map from
-#   .tmp_busybox2, just in case we did not generate kallsyms correctly.
+# o The correct .tmp_kallsyms2.o is linked into the final bbx.
+# o Verify that the System.map from bbx matches the map from
+#   .tmp_bbx2, just in case we did not generate kallsyms correctly.
 # o If CONFIG_KALLSYMS_EXTRA_PASS is set, do an extra pass using
-#   .tmp_busybox3 and .tmp_kallsyms3.o.  This is only meant as a
+#   .tmp_bbx3 and .tmp_kallsyms3.o.  This is only meant as a
 #   temporary bypass to allow the kernel to be built while the
 #   maintainers work out what went wrong with kallsyms.
 
@@ -664,22 +665,22 @@ kallsyms.o := .tmp_kallsyms$(last_kallsyms).o
 define verify_kallsyms
 	$(Q)$(if $($(quiet)cmd_sysmap),                       \
 	  echo '  $($(quiet)cmd_sysmap) .tmp_System.map' &&)  \
-	  $(cmd_sysmap) .tmp_busybox$(last_kallsyms) .tmp_System.map
+	  $(cmd_sysmap) .tmp_bbx$(last_kallsyms) .tmp_System.map
 	$(Q)cmp -s System.map .tmp_System.map ||              \
 		(echo Inconsistent kallsyms data;             \
 		 echo Try setting CONFIG_KALLSYMS_EXTRA_PASS; \
 		 rm .tmp_kallsyms* ; /bin/false )
 endef
 
-# Update busybox version before link
+# Update bbx version before link
 # Use + in front of this rule to silent warning about make -j1
 # First command is ':' to allow us to use + in front of this rule
-cmd_ksym_ld = $(cmd_busybox__)
+cmd_ksym_ld = $(cmd_bbx__)
 define rule_ksym_ld
 	:
-	+$(call cmd,busybox_version)
-	$(call cmd,busybox__)
-	$(Q)echo 'cmd_$@ := $(cmd_busybox__)' > $(@D)/.$(@F).cmd
+	+$(call cmd,bbx_version)
+	$(call cmd,bbx__)
+	$(Q)echo 'cmd_$@ := $(cmd_bbx__)' > $(@D)/.$(@F).cmd
 endef
 
 # Generate .S file with all kernel symbols
@@ -690,18 +691,18 @@ quiet_cmd_kallsyms = KSYM    $@
 .tmp_kallsyms1.o .tmp_kallsyms2.o .tmp_kallsyms3.o: %.o: %.S scripts FORCE
 	$(call if_changed_dep,as_o_S)
 
-.tmp_kallsyms%.S: .tmp_busybox% $(KALLSYMS)
+.tmp_kallsyms%.S: .tmp_bbx% $(KALLSYMS)
 	$(call cmd,kallsyms)
 
-# .tmp_busybox1 must be complete except kallsyms, so update busybox version
-.tmp_busybox1: $(busybox-lds) $(busybox-all) FORCE
+# .tmp_bbx1 must be complete except kallsyms, so update bbx version
+.tmp_bbx1: $(bbx-lds) $(bbx-all) FORCE
 	$(call if_changed_rule,ksym_ld)
 
-.tmp_busybox2: $(busybox-lds) $(busybox-all) .tmp_kallsyms1.o FORCE
-	$(call if_changed,busybox__)
+.tmp_bbx2: $(bbx-lds) $(bbx-all) .tmp_kallsyms1.o FORCE
+	$(call if_changed,bbx__)
 
-.tmp_busybox3: $(busybox-lds) $(busybox-all) .tmp_kallsyms2.o FORCE
-	$(call if_changed,busybox__)
+.tmp_bbx3: $(bbx-lds) $(bbx-all) .tmp_kallsyms2.o FORCE
+	$(call if_changed,bbx__)
 
 # Needs to visit scripts/ before $(KALLSYMS) can be used.
 $(KALLSYMS): scripts ;
@@ -709,7 +710,7 @@ $(KALLSYMS): scripts ;
 # Generate some data for debugging strange kallsyms problems
 debug_kallsyms: .tmp_map$(last_kallsyms)
 
-.tmp_map%: .tmp_busybox% FORCE
+.tmp_map%: .tmp_bbx% FORCE
 	($(OBJDUMP) -h $< | $(AWK) '/^ +[0-9]/{print $$4 " 0 " $$2}'; $(NM) $<) | sort > $@
 
 .tmp_map3: .tmp_map2
@@ -718,33 +719,33 @@ debug_kallsyms: .tmp_map$(last_kallsyms)
 
 endif # ifdef CONFIG_KALLSYMS
 
-# busybox image - including updated kernel symbols
-busybox_unstripped: $(busybox-all) FORCE
-	$(call if_changed_rule,busybox__)
+# bbx image - including updated kernel symbols
+bbx_unstripped: $(bbx-all) FORCE
+	$(call if_changed_rule,bbx__)
 	$(Q)rm -f .old_version
 
-busybox: busybox_unstripped
+bbx: bbx_unstripped
 ifeq ($(SKIP_STRIP),y)
 	$(Q)cp $< $@
 else
 	$(Q)$(STRIP) -s --remove-section=.note --remove-section=.comment \
-		busybox_unstripped -o $@
+		bbx_unstripped -o $@
 # strip is confused by PIE executable and does not set exec bits
 	$(Q)chmod a+x $@
 endif
 
 # The actual objects are generated when descending,
 # make sure no implicit rule kicks in
-$(sort $(busybox-all)): $(busybox-dirs) ;
+$(sort $(bbx-all)): $(bbx-dirs) ;
 
-# Handle descending into subdirectories listed in $(busybox-dirs)
+# Handle descending into subdirectories listed in $(bbx-dirs)
 # Preset locale variables to speed up the build process. Limit locale
 # tweaks to this spot to avoid wrong language settings when running
 # make menuconfig etc.
 # Error messages still appears in the original language
 
-PHONY += $(busybox-dirs)
-$(busybox-dirs): prepare scripts
+PHONY += $(bbx-dirs)
+$(bbx-dirs): prepare scripts
 	$(Q)$(MAKE) $(build)=$@
 
 # Build the kernel release string
@@ -807,7 +808,7 @@ PHONY += prepare-all
 # 2) Create the include2 directory, used for the second asm symlink
 prepare3: .kernelrelease
 ifneq ($(KBUILD_SRC),)
-	@echo '  Using $(srctree) as source for busybox'
+	@echo '  Using $(srctree) as source for bbx'
 	$(Q)if [ -f $(srctree)/.config ]; then \
 		echo "  $(srctree) is not clean, please run 'make mrproper'";\
 		echo "  in the '$(srctree)' directory.";\
@@ -834,10 +835,10 @@ prepare0: archprepare FORCE
 # All the preparing..
 prepare prepare-all: prepare0
 
-#	Leave this as default for preprocessing busybox.lds.S, which is now
+#	Leave this as default for preprocessing bbx.lds.S, which is now
 #	done in arch/$(ARCH)/kernel/Makefile
 
-export CPPFLAGS_busybox.lds += -P -C -U$(ARCH)
+export CPPFLAGS_bbx.lds += -P -C -U$(ARCH)
 
 # 	FIXME: The asm symlink changes when $(ARCH) changes. That's
 #	hard to detect, but I suppose "make mrproper" is a good idea
@@ -896,7 +897,7 @@ all: modules
 #	Build modules
 
 PHONY += modules
-modules: $(busybox-dirs) $(if $(KBUILD_BUILTIN),busybox)
+modules: $(bbx-dirs) $(if $(KBUILD_BUILTIN),bbx)
 	@echo '  Building modules, stage 2.';
 	$(Q)$(MAKE) -rR -f $(srctree)/scripts/Makefile.modpost
 
@@ -928,7 +929,7 @@ _modinst_:
 
 # If System.map exists, run depmod.  This deliberately does not have a
 # dependency on System.map since that would run the dependency tree on
-# busybox.  This depmod is only for convenience to give the initial
+# bbx.  This depmod is only for convenience to give the initial
 # boot a modules.dep even before / is mounted read-write.  However the
 # boot script depmod is the master version.
 ifeq "$(strip $(INSTALL_MOD_PATH))" ""
@@ -947,7 +948,7 @@ else # CONFIG_MODULES
 
 modules modules_install: FORCE
 	@echo
-	@echo "The present busybox configuration has modules disabled."
+	@echo "The present bbx configuration has modules disabled."
 	@echo "Type 'make config' and enable loadable module support."
 	@echo "Then build a kernel with module support enabled."
 	@echo
@@ -964,9 +965,9 @@ endif # CONFIG_MODULES
 
 # Directories & files removed with 'make clean'
 CLEAN_DIRS  += $(MODVERDIR) _install 0_lib
-CLEAN_FILES +=	busybox busybox_unstripped* busybox.links \
+CLEAN_FILES +=	bbx bbx_unstripped* bbx.links \
                 System.map .kernelrelease \
-                .tmp_kallsyms* .tmp_version .tmp_busybox* .tmp_System.map
+                .tmp_kallsyms* .tmp_version .tmp_bbx* .tmp_System.map
 
 # Directories & files removed with 'make mrproper'
 MRPROPER_DIRS  += include/config include2
@@ -981,7 +982,7 @@ MRPROPER_FILES += .config .config.old include/asm .version .old_version \
 		  include/usage.h \
 		  applets/usage \
 		  .kernelrelease Module.symvers tags TAGS cscope* \
-		  busybox_old
+		  bbx_old
 
 MRPROPER_FILES += include-full/*.h \
                   include-minimal/*.h
@@ -990,7 +991,7 @@ MRPROPER_FILES += include-full/*.h \
 #
 clean: rm-dirs  := $(CLEAN_DIRS)
 clean: rm-files := $(CLEAN_FILES)
-clean-dirs      := $(addprefix _clean_,$(srctree) $(busybox-alldirs))
+clean-dirs      := $(addprefix _clean_,$(srctree) $(bbx-alldirs))
 
 PHONY += $(clean-dirs) clean archclean
 $(clean-dirs):
@@ -1005,8 +1006,8 @@ clean: archclean $(clean-dirs)
 		-type f -print | xargs rm -f
 
 PHONY += doc-clean
-doc-clean: rm-files := docs/busybox.pod \
-		  docs/BusyBox.html docs/busybox.1 docs/BusyBox.txt
+doc-clean: rm-files := docs/bbx.pod \
+		  docs/BusyBox.html docs/bbx.1 docs/BusyBox.txt
 doc-clean:
 	$(call cmd,rmfiles)
 
@@ -1254,7 +1255,7 @@ endif #ifeq ($(mixed-targets),1)
 
 PHONY += checkstack
 checkstack:
-	$(OBJDUMP) -d busybox $$(find . -name '*.ko') | \
+	$(OBJDUMP) -d bbx $$(find . -name '*.ko') | \
 	$(PERL) $(src)/scripts/checkstack.pl $(ARCH)
 
 kernelrelease:
@@ -1346,7 +1347,7 @@ PHONY += FORCE
 FORCE:
 
 show-sources:
-	@for f in $(busybox-dirs) ; do \
+	@for f in $(bbx-dirs) ; do \
 		$(MAKE) $(build)=$$f show-src ; \
 	done
 
