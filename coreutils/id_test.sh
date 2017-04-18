@@ -3,7 +3,7 @@
 # Needs root privileges for some tests.
 
 cp /usr/bin/id .
-BUSYBOX=./bbx
+BBX=./bbx
 ID=./id
 LIST=`awk -F: '{ printf "%s\n", $1 }' /etc/passwd`
 FLAG_USER_EXISTS="no"
@@ -14,7 +14,7 @@ rm -f foo bar
 for OPTIONS in "" "-u" "-un" "-unr" "-g" "-gn" "-gnr" "-G" "-Gn" "-Gnr"
 do
 	#echo "$OPTIONS"
-	$BUSYBOX id $OPTIONS >foo 2>/dev/null
+	$BBX id $OPTIONS >foo 2>/dev/null
 	RET1=$?
 	$ID $OPTIONS >bar 2>/dev/null
 	RET2=$?
@@ -33,7 +33,7 @@ do
 		if test "$i" = "$TEST_USER"; then
 			FLAG_USER_EXISTS="yes"
 		fi
-		$BUSYBOX id $OPTIONS $i >foo 2>/dev/null
+		$BBX id $OPTIONS $i >foo 2>/dev/null
 		RET1=$?
 		$ID $OPTIONS $i >bar 2>/dev/null
 		RET2=$?
@@ -52,8 +52,8 @@ fi
 
 adduser -s /bin/true -g "" -H -D "$TEST_USER" || exit 1
 
-chown $TEST_USER.$TEST_USER $BUSYBOX
-chmod u+s $BUSYBOX 2>&1 /dev/null
+chown $TEST_USER.$TEST_USER $BBX
+chmod u+s $BBX 2>&1 /dev/null
 chown $TEST_USER.$TEST_USER $ID
 chmod u+s $ID 2>&1 /dev/null
 
@@ -62,7 +62,7 @@ rm -f foo bar
 for OPTIONS in "" "-u" "-un" "-unr" "-g" "-gn" "-gnr" "-G" "-Gn" "-Gnr"
 do
 	#echo "$OPTIONS"
-	$BUSYBOX id $OPTIONS >foo 2>/dev/null
+	$BBX id $OPTIONS >foo 2>/dev/null
 	RET1=$?
 	$ID $OPTIONS >bar 2>/dev/null
 	RET2=$?
@@ -79,7 +79,7 @@ for OPTIONS in "" "-u" "-un" "-unr" "-g" "-gn" "-gnr" "-G" "-Gn" "-Gnr"
 do
 	#echo "$OPTIONS"
 	for i in $LIST ; do
-		$BUSYBOX id $OPTIONS $i >foo 2>/dev/null
+		$BBX id $OPTIONS $i >foo 2>/dev/null
 		RET1=$?
 		$ID $OPTIONS $i >bar 2>/dev/null
 		RET2=$?
@@ -90,8 +90,8 @@ do
 	done
 done
 
-chown $TEST_USER.$TEST_USER $BUSYBOX
-chmod g+s $BUSYBOX 2>&1 /dev/null
+chown $TEST_USER.$TEST_USER $BBX
+chmod g+s $BBX 2>&1 /dev/null
 chown $TEST_USER.$TEST_USER $ID
 chmod g+s $ID 2>&1 /dev/null
 
@@ -100,7 +100,7 @@ rm -f foo bar
 for OPTIONS in "" "-u" "-un" "-unr" "-g" "-gn" "-gnr" "-G" "-Gn" "-Gnr"
 do
 	#echo "$OPTIONS"
-	$BUSYBOX id $OPTIONS >foo 2>/dev/null
+	$BBX id $OPTIONS >foo 2>/dev/null
 	RET1=$?
 	$ID $OPTIONS >bar 2>/dev/null
 	RET2=$?
@@ -117,7 +117,7 @@ for OPTIONS in "" "-u" "-un" "-unr" "-g" "-gn" "-gnr" "-G" "-Gn" "-Gnr"
 do
 	#echo "$OPTIONS"
 	for i in $LIST ; do
-		$BUSYBOX id $OPTIONS $i >foo 2>/dev/null
+		$BBX id $OPTIONS $i >foo 2>/dev/null
 		RET1=$?
 		$ID $OPTIONS $i >bar 2>/dev/null
 		RET2=$?
@@ -128,8 +128,8 @@ do
 	done
 done
 
-chown $TEST_USER.$TEST_USER $BUSYBOX
-chmod u+s,g+s $BUSYBOX 2>&1 /dev/null
+chown $TEST_USER.$TEST_USER $BBX
+chmod u+s,g+s $BBX 2>&1 /dev/null
 chown $TEST_USER.$TEST_USER $ID
 chmod u+s,g+s $ID 2>&1 /dev/null
 
@@ -138,7 +138,7 @@ rm -f foo bar
 for OPTIONS in "" "-u" "-un" "-unr" "-g" "-gn" "-gnr" "-G" "-Gn" "-Gnr"
 do
 	#echo "$OPTIONS"
-	$BUSYBOX id $OPTIONS >foo 2>/dev/null
+	$BBX id $OPTIONS >foo 2>/dev/null
 	RET1=$?
 	$ID $OPTIONS >bar 2>/dev/null
 	RET2=$?
@@ -155,7 +155,7 @@ for OPTIONS in "" "-u" "-un" "-unr" "-g" "-gn" "-gnr" "-G" "-Gn" "-Gnr"
 do
 	#echo "$OPTIONS"
 	for i in $LIST ; do
-		$BUSYBOX id $OPTIONS $i >foo 2>/dev/null
+		$BBX id $OPTIONS $i >foo 2>/dev/null
 		RET1=$?
 		$ID $OPTIONS $i >bar 2>/dev/null
 		RET2=$?
@@ -173,7 +173,7 @@ rm -f foo bar
 for OPTIONS in "" "-u" "-un" "-unr" "-g" "-gn" "-gnr" "-G" "-Gn" "-Gnr"
 do
 	#echo "$OPTIONS"
-	$BUSYBOX id $OPTIONS >foo 2>/dev/null
+	$BBX id $OPTIONS >foo 2>/dev/null
 	RET1=$?
 	$ID $OPTIONS >bar 2>/dev/null
 	RET2=$?
@@ -189,7 +189,7 @@ for OPTIONS in "" "-u" "-un" "-unr" "-g" "-gn" "-gnr" "-G" "-Gn" "-Gnr"
 do
 	#echo "$OPTIONS"
 	for i in $LIST ; do
-		$BUSYBOX id $OPTIONS $i >foo 2>/dev/null
+		$BBX id $OPTIONS $i >foo 2>/dev/null
 		RET1=$?
 		$ID $OPTIONS $i >bar 2>/dev/null
 		RET2=$?
@@ -200,9 +200,9 @@ do
 	done
 done
 
-chown .root $BUSYBOX 2>&1 /dev/null
+chown .root $BBX 2>&1 /dev/null
 chown .root $ID 2>&1 /dev/null
-chmod g+s $BUSYBOX 2>&1 /dev/null
+chmod g+s $BBX 2>&1 /dev/null
 chmod g+s $ID 2>&1 /dev/null
 
 echo "test 11 setgid, not existing group: id [options] no username"
@@ -210,7 +210,7 @@ rm -f foo bar
 for OPTIONS in "" "-u" "-un" "-unr" "-g" "-gn" "-gnr" "-G" "-Gn" "-Gnr"
 do
 	#echo "$OPTIONS"
-	$BUSYBOX id $OPTIONS >foo 2>/dev/null
+	$BBX id $OPTIONS >foo 2>/dev/null
 	RET1=$?
 	$ID $OPTIONS >bar 2>/dev/null
 	RET2=$?
@@ -227,7 +227,7 @@ for OPTIONS in "" "-u" "-un" "-unr" "-g" "-gn" "-gnr" "-G" "-Gn" "-Gnr"
 do
 	#echo "$OPTIONS"
 	for i in $LIST ; do
-		$BUSYBOX id $OPTIONS $i >foo 2>/dev/null
+		$BBX id $OPTIONS $i >foo 2>/dev/null
 		RET1=$?
 		$ID $OPTIONS $i >bar 2>/dev/null
 		RET2=$?
@@ -238,7 +238,7 @@ do
 	done
 done
 
-chown root.root $BUSYBOX 2>&1 /dev/null
+chown root.root $BBX 2>&1 /dev/null
 chown root.root $ID 2>&1 /dev/null
 rm -f $ID
 rm -f foo bar

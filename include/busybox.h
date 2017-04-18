@@ -2,8 +2,8 @@
 /*
  * Licensed under GPLv2 or later, see file LICENSE in this source tree.
  */
-#ifndef BUSYBOX_H
-#define BUSYBOX_H 1
+#ifndef BBX_H
+#define BBX_H 1
 
 #include "libbb.h"
 /* BB_DIR_foo and BB_SUID_bar constants: */
@@ -48,8 +48,8 @@ extern const uint8_t applet_install_loc[] ALIGN1;
 /* Length of these names has effect on size of libbusybox
  * and "individual" binaries. Keep them short.
  */
-#if ENABLE_BUILD_LIBBUSYBOX
-#if ENABLE_FEATURE_SHARED_BUSYBOX
+#if ENABLE_BUILD_LIBBBX
+#if ENABLE_FEATURE_SHARED_BBX
 int lbb_main(char **argv) EXTERNALLY_VISIBLE;
 #else
 int lbb_main(char **argv);
