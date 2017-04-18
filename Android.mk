@@ -146,46 +146,6 @@ LOCAL_ADDITIONAL_DEPENDENCIES := $(bbx_prepare_minimal)
 include $(BUILD_STATIC_LIBRARY)
 
 
-# Bionic Busybox /system/xbin
-
-LOCAL_PATH := $(BB_PATH)
-include $(CLEAR_VARS)
-
-BBX_CONFIG:=full
-BBX_SUFFIX:=bionic
-LOCAL_SRC_FILES := $(BBX_SRC_FILES)
-LOCAL_C_INCLUDES := $(bb_gen)/full/include $(BBX_C_INCLUDES)
-LOCAL_CFLAGS += \
-	$(BBX_CFLAGS) \
-	'-DBB_VER="$(shell cat $(TARGET_OUT_INTERMEDIATES)/bbx/full/.kernelrelease)"' 
-LOCAL_ASFLAGS := $(BBX_AFLAGS)
-LOCAL_MODULE := bbx
-LOCAL_MODULE_TAGS := eng debug
-LOCAL_MODULE_PATH := $(TARGET_OUT_OPTIONAL_EXECUTABLES)
-LOCAL_SHARED_LIBRARIES := libc libcutils libm
-LOCAL_STATIC_LIBRARIES := libregx libuclibcrpc2 libselinux
-LOCAL_ADDITIONAL_DEPENDENCIES := $(bbx_prepare_full)
-include $(BUILD_EXECUTABLE)
-
-BBX_LINKS := $(shell cat $(BB_PATH)/bbx-$(BBX_CONFIG).links)
-# nc is provided by external/netcat
-exclude := nc
-SYMLINKS := $(addprefix $(TARGET_OUT_OPTIONAL_EXECUTABLES)/,$(filter-out $(exclude),$(notdir $(BBX_LINKS))))
-$(SYMLINKS): BBX_BINARY := $(LOCAL_MODULE)
-$(SYMLINKS): $(LOCAL_INSTALLED_MODULE)
-	@echo -e ${CL_CYN}"Symlink:"${CL_RST}" $@ -> $(BBX_BINARY)"
-	@mkdir -p $(dir $@)
-	@rm -rf $@
-	$(hide) ln -sf $(BBX_BINARY) $@
-
-ALL_DEFAULT_INSTALLED_MODULES += $(SYMLINKS)
-
-# We need this so that the installed files could be picked up based on the
-# local module name
-ALL_MODULES.$(LOCAL_MODULE).INSTALLED := \
-    $(ALL_MODULES.$(LOCAL_MODULE).INSTALLED) $(SYMLINKS)
-
-
 # Static Busybox
 
 LOCAL_PATH := $(BB_PATH)
@@ -206,10 +166,9 @@ LOCAL_CFLAGS += \
   '-DBB_VER="$(shell cat $(TARGET_OUT_INTERMEDIATES)/bbx/full/.kernelrelease)"' 
 LOCAL_ASFLAGS := $(BBX_AFLAGS)
 LOCAL_FORCE_STATIC_EXECUTABLE := true
-LOCAL_MODULE := static_bbx
-LOCAL_MODULE_STEM := bbx
+LOCAL_MODULE := bbx
 LOCAL_MODULE_TAGS := optional
-LOCAL_STATIC_LIBRARIES := libregx libc libcutils libm libuclibcrpc2 libselinux
+LOCAL_STATIC_LIBRARIES := libc libcutils libm libregx libuclibcrpc2 libselinux
 LOCAL_MODULE_CLASS := EXECUTABLES
 LOCAL_MODULE_PATH := $(TARGET_ROOT_OUT_SBIN)
 LOCAL_UNSTRIPPED_PATH := $(PRODUCT_OUT)/symbols/utilities

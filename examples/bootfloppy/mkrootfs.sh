@@ -8,7 +8,7 @@
 
 
 # command-line settable variables
-BUSYBOX_DIR=..
+BBX_DIR=..
 UCLIBC_DIR=../../uClibc
 TARGET_DIR=./loop
 FSSIZE=4000
@@ -22,7 +22,7 @@ BASE_DIR=`pwd`
 while getopts 'b:u:s:t:Cm' opt
 do
 	case $opt in
-		b) BUSYBOX_DIR=$OPTARG ;;
+		b) BBX_DIR=$OPTARG ;;
 		u) UCLIBC_DIR=$OPTARG ;;
 		t) TARGET_DIR=$OPTARG ;;
 		s) FSSIZE=$OPTARG ;;
@@ -73,7 +73,7 @@ cd $BASE_DIR
 
 
 # install bbx and components
-cd $BUSYBOX_DIR
+cd $BBX_DIR
 make distclean
 make CC=$BASE_DIR/$UCLIBC_DIR/extra/gcc-uClibc/i386-uclibc-gcc
 make CONFIG_PREFIX=$BASE_DIR/$TARGET_DIR install

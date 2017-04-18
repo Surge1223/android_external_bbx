@@ -17,7 +17,7 @@
 #define BB_EXTRA_VERSION BB_BT
 #endif
 
-#define BANNER "BusyBox v" BB_VER " (" BB_EXTRA_VERSION ")"
+#define BANNER "BBX v" BB_VER " (" BB_EXTRA_VERSION ")"
 
 const char bb_banner[] ALIGN1 = BANNER;
 
@@ -35,7 +35,7 @@ const char bb_msg_standard_output[] ALIGN1 = "standard output";
 
 const char bb_hexdigits_upcase[] ALIGN1 = "0123456789ABCDEF";
 
-const char bb_bbx_exec_path[] ALIGN1 = CONFIG_BUSYBOX_EXEC_PATH;
+const char bb_bbx_exec_path[] ALIGN1 = CONFIG_BBX_EXEC_PATH;
 const char bb_default_login_shell[] ALIGN1 = LIBBB_DEFAULT_LOGIN_SHELL;
 /* util-linux manpage says /sbin:/bin:/usr/sbin:/usr/bin,
  * but I want to save a few bytes here. Check libbb.h before changing! */

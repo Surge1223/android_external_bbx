@@ -175,7 +175,7 @@
 # error
 # error
 # error "Can't determine endianness !"
-# error "DO NOT USE 'MAKE' TO BUILD BIONIC BUSYBOX"
+# error "DO NOT USE 'MAKE' TO BUILD BIONIC BBX"
 # error
 # error
   exit 1
