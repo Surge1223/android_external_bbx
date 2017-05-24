@@ -108,8 +108,8 @@ BBX_CFLAGS = \
 	-include $(bb_gen)/$(BBX_CONFIG)/include/autoconf.h \
 	'-DCONFIG_DEFAULT_MODULES_DIR="$(KERNEL_MODULES_DIR)"' \
 	-DBB_BT=AUTOCONF_TIMESTAMP
-	
-	
+
+
 ifeq ($(BIONIC_L),true)
     BBX_CFLAGS += -DBIONIC_L
     BBX_AFLAGS += -DBIONIC_L
@@ -137,7 +137,7 @@ LOCAL_CFLAGS += \
   -Dgetmntent=bbx_getmntent \
   -Dgetmntent_r=bbx_getmntent_r \
   -Dgenerate_uuid=bbx_generate_uuid \
-  '-DBB_VER="$(shell cat $(TARGET_OUT_INTERMEDIATES)/bbx/minimal/.kernelrelease)"' 
+  '-DBB_VER="$(shell cat $(PRODUCT_OUT)/obj/bbx/minimal/.kernelrelease)"'
 LOCAL_ASFLAGS := $(BBX_AFLAGS)
 LOCAL_MODULE := libbbx
 LOCAL_MODULE_TAGS := eng debug
@@ -163,7 +163,7 @@ LOCAL_CFLAGS += \
   -Dgetmntent=bbx_getmntent \
   -Dgetmntent_r=bbx_getmntent_r \
   -Dgenerate_uuid=bbx_generate_uuid \
-  '-DBB_VER="$(shell cat $(TARGET_OUT_INTERMEDIATES)/bbx/full/.kernelrelease)"' 
+  '-DBB_VER="$(shell cat $(PRODUCT_OUT)/obj/bbx/full/.kernelrelease)"'
 LOCAL_ASFLAGS := $(BBX_AFLAGS)
 LOCAL_FORCE_STATIC_EXECUTABLE := true
 LOCAL_MODULE := bbx
