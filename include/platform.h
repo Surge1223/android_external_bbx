@@ -490,7 +490,7 @@ typedef void (*sighandler_t)(int);
 #endif
 
 #ifndef HAVE_STPCPY
-extern char *stpcpy(char *p, const char *to_add) FAST_FUNC;
+extern char *stpcpy(char *p, const char *to_add) __overloadable FAST_FUNC;
 #endif
 
 #ifndef HAVE_STRCASESTR

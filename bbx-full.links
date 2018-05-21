@@ -106,7 +106,6 @@
 /bin/lzop
 /bin/lzopcat
 /sbin/man
-/sbin/matchpathcon
 /bin/md5sum
 /bin/mesg
 /bin/mkdir
@@ -169,10 +168,9 @@
 /bin/sed
 /sbin/selinuxenabled
 /bin/seq
-/sbin/sestatus
 /sbin/setconsole
-/sbin/setenforce
 /sbin/setfiles
+/sbin/setenforce
 /bin/setkeycodes
 /sbin/setsebool
 /bin/setserial
@@ -238,3 +236,4 @@
 /bin/xzcat
 /bin/yes
 /bin/zcat
+

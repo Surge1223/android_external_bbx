@@ -34,7 +34,7 @@
 #  include <netinet/in6.h>
 # endif
 # define ANDROID_CHANGES
-# ifdef BIONIC_L
+# ifdef ANDROID
 #  include <arpa/nameser.h>
 #  include <dns/include/resolv_private.h>
 #  include <dns/resolv/res_private.h>

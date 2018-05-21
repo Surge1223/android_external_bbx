@@ -8,7 +8,7 @@
  */
 #include "libbb.h"
 
-#if defined(IPV6_PKTINFO) && defined(__BIONIC__) && !defined(BIONIC_ICS)
+#if defined(IPV6_PKTINFO) && !defined(__BIONIC__) && defined(__NOTNDK__)
 // now included in Bionic ICS
 struct in6_pktinfo {
         struct in6_addr ipi6_addr;    // src/dst IPv6 address

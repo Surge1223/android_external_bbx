@@ -83,14 +83,7 @@ char *hasmntopt(const struct mntent *, const char *);
 /* bionic's vfork is rather broken; for now a terrible bandaid: */
 #define vfork fork
 
-#if !defined(BIONIC_L) && !defined(BLOATCHECK)
-#define _SOCKLEN_T_DECLARED
-typedef int socklen_t;
-#endif
-
 /* wait3 was removed in android L */
-#ifdef BIONIC_L
 #define wait3(status, options, rusage) wait4(-1, status, options, rusage)
-#endif
 
 #endif

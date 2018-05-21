@@ -54,7 +54,7 @@
 #define _PATH_PROCNET_DEV               "/proc/net/dev"
 #define _PATH_PROCNET_IFINET6           "/proc/net/if_inet6"
 
-#if defined(HAVE_AFINET6) && !defined(BIONIC_L)
+#if defined(HAVE_AFINET6) && defined(__NOT_NDK__)
 # ifndef _LINUX_IN6_H
 /*
  * This is from linux/include/net/ipv6.h

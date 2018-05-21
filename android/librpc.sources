@@ -1,7 +1,6 @@
 android/librpc/auth_none.c
 android/librpc/auth_unix.c
 android/librpc/authunix_prot.c
-android/librpc/bindresvport.c
 android/librpc/clnt_generic.c
 android/librpc/clnt_perror.c
 android/librpc/clnt_raw.c

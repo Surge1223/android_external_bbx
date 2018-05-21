@@ -47,6 +47,7 @@
 #include "libbb.h"
 #if ENABLE_FEATURE_SETFILES_CHECK_OPTION
 #include <sepol/sepol.h>
+#include <selinux/selinux.h>
 #endif
 
 #define MAX_EXCLUDES 50
@@ -136,6 +137,127 @@ enum {
 #define FLAG_W_warn_no_match (option_mask32 & OPT_W)
 #define FLAG_c               (option_mask32 & OPT_c)
 #define FLAG_R               (option_mask32 & OPT_R)
+
+
+#include <unistd.h>
+#include <errno.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <ctype.h>
+#include <pwd.h>
+#include <limits.h>
+#include "android_selinux_internal.h"
+#include "context_internal.h"
+
+#define FILE_CONTEXTS "/file_contexts"
+#define SYS_PATH "/sys"
+#define SYS_PREFIX "/"
+
+#define fgets_unlocked(buf, size, fp) fgets(buf, size, fp)
+
+static const char *selinux_customizable_path = SYS_PATH;
+char *selinux_mnt = NULL;
+int selinux_page_size = 0;
+
+int has_selinux_config = 0;
+static const char *selinux_filecontext_path = FILE_CONTEXTS;
+
+const char *selinux_customizable_types_path(void)
+{
+  return selinux_customizable_path;
+
+}
+const char *selinux_file_context_path(void)
+{
+  return selinux_filecontext_path;
+
+}
+
+static int get_customizable_type_list(char *** retlist)
+{
+        FILE *fp;
+        char *buf;
+        unsigned int ctr = 0, i;
+        char **list = NULL;
+
+        fp = fopen(selinux_customizable_types_path(), "re");
+        if (!fp)
+                return -1;
+
+        buf = malloc(selinux_page_size);
+        if (!buf) {
+                fclose(fp);
+                return -1;
+        }
+        while (fgets_unlocked(buf, selinux_page_size, fp) && ctr < UINT_MAX) {
+                ctr++;
+        }
+        rewind(fp);
+        if (ctr) {
+                list =
+                    (char **) calloc(sizeof(char *),
+                                                  ctr + 1);
+                if (list) {
+                        i = 0;
+                        while (fgets_unlocked(buf, selinux_page_size, fp)
+                               && i < ctr) {
+                                buf[strlen(buf) - 1] = 0;
+                                list[i] = (char *) strdup(buf);
+                                if (!list[i]) {
+                                        unsigned int j;
+                                        for (j = 0; j < i; j++)
+                                                free(list[j]);
+                                        free(list);
+                                        list = NULL;
+                                        break;
+                                }
+                                i++;
+                        }
+                }
+        }
+        fclose(fp);
+        free(buf);
+        if (!list)
+                return -1;
+        *retlist = list;
+        return 0;
+}
+
+
+
+static char **customizable_list = NULL;
+
+int is_context_customizable(const char * scontext)
+{
+        int i;
+        const char *type;
+        context_t c;
+
+        if (!customizable_list) {
+                if (get_customizable_type_list(&customizable_list) != 0)
+                        return -1;
+        }
+
+        c = context_new(scontext);
+        if (!c)
+                return -1;
+
+        type = context_type_get(c);
+        if (!type) {
+                context_free(c);
+                return -1;
+        }
+
+        for (i = 0; customizable_list[i]; i++) {
+                if (strcmp(customizable_list[i], type) == 0) {
+                        context_free(c);
+                        return 1;
+                }
+        }
+        context_free(c);
+        return 0;
+}
 
 
 static void qprintf(const char *fmt UNUSED_PARAM, ...)
@@ -653,7 +775,7 @@ int setfiles_main(int argc UNUSED_PARAM, char **argv)
 
 #ifdef __BIONIC__
 	else {
-		const char *file_contexts = selinux_file_contexts_path();
+		const char *file_contexts = selinux_file_context_path();
 		/* Load the default file contexts configuration and check it. */
 		if (matchpathcon_init(file_contexts) < 0) {
 			bb_perror_msg_and_die("%s not found!", file_contexts);

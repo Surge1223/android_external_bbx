@@ -15,7 +15,7 @@
 //usage:     "\n	-b	Display current state of booleans"
 
 #include "libbb.h"
-
+#include <selinux/selinux.h>
 extern char *selinux_mnt;
 
 #define OPT_VERBOSE  (1 << 0)

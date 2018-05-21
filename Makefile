@@ -1,7 +1,7 @@
 VERSION = 1
 PATCHLEVEL = 23
-SUBLEVEL =  
-EXTRAVERSION = -Purified
+SUBLEVEL =
+EXTRAVERSION = -SexyAf
 NAME = bionic
 
 # prevent local tree builds in bionic,

@@ -141,7 +141,7 @@ char* FAST_FUNC strsep(char **stringp, const char *delim)
 #endif
 
 #ifndef HAVE_STPCPY
-char* FAST_FUNC stpcpy(char *p, const char *to_add)
+char* FAST_FUNC stpcpy(char *p, const char *to_add) __overloadable
 {
 	while ((*p = *to_add) != '\0') {
 		p++;
