@@ -41,7 +41,7 @@ BBX_CROSS_COMPILER_PREFIX := $(abspath $(TARGET_TOOLS_PREFIX))
 
 BB_PREPARE_FLAGS:=
 ifeq ($(HOST_OS),darwin)
-    BB_HOSTCC := $(ANDROID_BUILD_TOP)/prebuilts/gcc/darwin-x86/host/i686-apple-darwin-4.2.1/bin/i686-apple-darwin11-gcc
+    BB_HOSTCC := $(AOSP_ROOT)/prebuilts/gcc/darwin-x86/host/i686-apple-darwin-4.2.1/bin/i686-apple-darwin11-gcc
     BB_PREPARE_FLAGS := HOSTCC=$(BB_HOSTCC)
 endif
 
@@ -76,7 +76,7 @@ endif
 
 ifneq ($(filter arm arm64 x86 mips,$(TARGET_ARCH)),)
     BBX_SRC_FILES += \
-       $( $(ANDROID_BUILD_TOP)/bionic/libc/arch-$(TARGET_ARCH)/syscalls/,$(BBX_ASM_FILES))
+       $( $(AOSP_ROOT)/bionic/libc/arch-$(TARGET_ARCH)/syscalls/,$(BBX_ASM_FILES))
 endif
 
 
@@ -138,7 +138,7 @@ LOCAL_MODULE := bbx
 LOCAL_MODULE_TAGS := optional
 LOCAL_STATIC_LIBRARIES := libc libcutils libm libregx libuclibcrpc libsepol libselinux
 LOCAL_MODULE_CLASS := EXECUTABLES
-LOCAL_MODULE_PATH := $(ANDROID_PRODUCT_OUT)/system/bin
+LOCAL_MODULE_PATH := $(TARGET_ROOT_OUT_SBIN)
 LOCAL_ADDITIONAL_DEPENDENCIES := $(bbx_prepare_full)
 LOCAL_PACK_MODULE_RELOCATIONS := false
 include $(BUILD_EXECUTABLE)
